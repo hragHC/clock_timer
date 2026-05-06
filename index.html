@@ -1,1 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>20 Second Timer</title>
+    <style>
+        /* Centers the clock and sets the black background */
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* The dark grey rectangular clock container */
+        .clock-container {
+            background-color: #2c2c2c; /* Dark grey */
+            padding: 30px 60px;
+            border-radius: 12px; /* Slight rounding for a polished look */
+            border: 3px solid #1f1f1f;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        /* The muted gold digital digits */
+        #timer {
+            color: #c5a059; /* Muted gold */
+            font-size: 7rem;
+            font-weight: bold;
+            text-align: center;
+            /* Ensures digits stay in place and don't jitter as they change */
+            font-variant-numeric: tabular-nums; 
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="clock-container">
+        <div id="timer">20.00</div>
+    </div>
+
+    <script>
+        const timerElement = document.getElementById('timer');
+        const duration = 20000; // 20 seconds in milliseconds
+        const endTime = Date.now() + duration;
+
+        function updateTimer() {
+            const now = Date.now();
+            const timeLeft = Math.max(0, endTime - now);
+
+            // Calculate seconds and hundredths of a second (centiseconds)
+            const seconds = Math.floor(timeLeft / 1000);
+            const centiseconds = Math.floor((timeLeft % 1000) / 10);
+
+            // Format to ensure leading zeros (e.g., 09.05)
+            const formattedSeconds = seconds.toString().padStart(2, '0');
+            const formattedCentiseconds = centiseconds.toString().padStart(2, '0');
+
+            // Update the display
+            timerElement.textContent = `${formattedSeconds}.${formattedCentiseconds}`;
+
+            // Continue the loop if there is time left
+            if (timeLeft > 0) {
+                requestAnimationFrame(updateTimer);
+            } else {
+                // Ensure it stops exactly at 00.00
+                timerElement.textContent = "00.00";
+            }
+        }
+
+        // Start the countdown immediately
+        requestAnimationFrame(updateTimer);
+    </script>
+
+</body>
+</html>
 
